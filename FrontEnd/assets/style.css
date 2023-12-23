@@ -125,6 +125,40 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+ .filtres{
+	display: flex;
+    justify-content: center;
+    gap: 2em;
+    margin: 50px 0px 50px 0px;
+ }
+.filterCategories {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	margin-bottom: 2em;
+}
+
+.filterCategories-btn {
+	border: 1px solid #1D6154;
+	border-radius: 60px;
+	background-color: transparent;
+	font-family: 'Syne';
+	color: #1D6154;
+	font-size: 16px;
+	padding: 9px 20px;
+	cursor: pointer;
+	transition: all 250ms ease;
+}
+
+.filterCategories-btn:hover {
+	background-color: #1D6154;
+	color: white;}
+
+.btn-active, .btn-active:hover {
+	background-color: #1D6154;
+	color: white;
+}
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -137,32 +171,37 @@ li:hover {
 	width: 100%;
 
 }
-#contact {
+
+#contact, #login {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
-#contact > * {
+#contact > *, #login > *  {
 	text-align: center;
 
 }
-#contact h2{
+#contact h2, #login h2{
 	margin-bottom: 20px;
 }
-#contact form {
+#contact form, #login form, #form_photo {
 	text-align: left;
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
 }
 
-#contact input {
+#contact input,#login input, #form_photo select, #form_photo option, #titre_form {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-#contact label {
+#contact label, #login label, #form_photo label{
 	margin: 2em 0 1em 0;
+}
+#login a {
+	color: black;
+	font-family: 'Syne';
 }
 #contact textarea {
 	border: none;
