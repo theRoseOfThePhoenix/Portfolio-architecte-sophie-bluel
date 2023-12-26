@@ -16,10 +16,10 @@ function creatGallery(gallerys){
       const imageElement = document.createElement("img");
       imageElement.src = loop.imageUrl;
       imageElement.alt = loop.title;
-    const descriptionPhoto = document.createElement("figcaption");
-    descriptionPhoto.innerText = loop.title; 
+      const descriptionPhoto = document.createElement("figcaption");
+      descriptionPhoto.innerText = loop.title; 
       const idElement = document.createElement("id");
-    idElement.id =  loop.categoryId;
+      idElement.id =  loop.categoryId;
     
     console.log(idElement);
     console.log(figureElement);
@@ -39,10 +39,10 @@ const btnAll = document.querySelector(".filterAll");
       //remettre à zero
       document.querySelector(".gallery").innerText = ""; 
       creatGallery(gallerys);
-      document.querySelectorAll("#filtres button").forEach(function(btn) {
-        btn.classList.remove("active");
+      document.querySelectorAll(".filterCategories-btn").forEach(function(btn) {
+      btn.classList.remove("active");
     });
-    btnAll.classList.add("active");
+      btnAll.classList.add("active");
     
       console.log("youyou");
 });
@@ -55,7 +55,7 @@ const btnAll = document.querySelector(".filterAll");
     });
     document.querySelector(".gallery").innerText = "";
     creatGallery(galleryObjets);
-    document.querySelectorAll("#filtres button").forEach(function(btn) {
+    document.querySelectorAll(".filterCategories-btn").forEach(function(btn) {
         btn.classList.remove("active");
     });
     btnObjet.classList.add("active");
@@ -70,7 +70,7 @@ btnAppartements.addEventListener ("click",  function() {
     });
     document.querySelector(".gallery").innerText = "";
     creatGallery(galleryAppartements);
-    document.querySelectorAll("#filtres button").forEach(function(btn) {
+    document.querySelectorAll(".filterCategories-btn").forEach(function(btn) {
       btn.classList.remove("active");
   });
   btnAppartements.classList.add("active");
@@ -84,7 +84,7 @@ btnHotelResto.addEventListener("click",  function() {
       });
       document.querySelector(".gallery").innerText = "";
       creatGallery(galleryHotelsRestaurants);
-      document.querySelectorAll("#filtres button").forEach(function(btn) {
+      document.querySelectorAll(".filterCategories-btn").forEach(function(btn) {
         btn.classList.remove("active");
     });
     btnHotelResto.classList.add("active");
