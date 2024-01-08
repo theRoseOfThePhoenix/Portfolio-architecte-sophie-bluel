@@ -44,7 +44,6 @@ const btnAll = document.querySelector(".filterAll");
     });
       btnAll.classList.add("active");
     
-      console.log("youyou");
 });
 
 // Bouton Objets    
@@ -91,3 +90,27 @@ btnHotelResto.addEventListener("click",  function() {
  });
       
     
+    // Création du bandeau d'édition en haut de la page
+    if (localStorage.getItem("token") !== null) {
+      // Changement du bouton "login" en "logout"
+      const loginHead = document.querySelector("#loginHead");
+      loginHead.innerText = "logout"
+      loginHead.addEventListener("click", function(event) {
+          event.preventDefault();
+          localStorage.removeItem("token");
+          window.location.replace("./index.html");
+      })
+    const bandeau = document.querySelector(".bandeau");
+    const zoneEdition = document.createElement("div");
+    zoneEdition.className = "editor";
+    const logoEdition = document.createElement("i");
+    logoEdition.className = "fa-regular fa-pen-to-square";
+    const modeEdition = document.createElement("p");
+    modeEdition.innerText = "Mode Édition";
+    const boutonPublier = document.createElement("button");
+    boutonPublier.innerText = "publier les changements";
+    bandeau.appendChild(zoneEdition);
+    zoneEdition.appendChild(logoEdition);
+    zoneEdition.appendChild(modeEdition);
+    zoneEdition.appendChild(boutonPublier);
+    }
