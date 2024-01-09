@@ -8,7 +8,7 @@ function login() {
         // Empêche la page de se rafraîchir immédiatement lors de la soumission du formulaire
     event.preventDefault();
 
-        // Crée un objet avec les informations de connexion (email et mot de passe)
+        // objet (email et mot de passe)
         const loginInfo = {
             email: email.value,
             password: password.value
@@ -28,19 +28,17 @@ function login() {
         .then(data => {
             console.log(data.status); // Vérifie le code de statut du serveur
 
-            // Si la connexion est réussie (code 200)
+            // mdp ok (code 200)
             if (data.status === 200) {
                 // Stocke le token dans local storage
-                 
                 localStorage.setItem("token", data.body.token);
                 console.log(data.body.token);
                 // Redirige l'utilisateur vers la page d'accueil
-
                 window.location.replace("./index.html");
                 
             }
 
-            // Si le mot de passe est incorrect (code 401)
+            // mdp incorrect (code 401)
             if (data.status === 401) {
                 alert("Mot de passe incorrect");
             }
