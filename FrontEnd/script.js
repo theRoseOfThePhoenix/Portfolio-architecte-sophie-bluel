@@ -33,6 +33,36 @@ function creatGallery(gallerys){
 }
 creatGallery(gallerys);
 
+
+function modalGallery(gallerys){
+
+  const modalGallery = document.querySelector(".modal_gallery")
+  modalGallery.innerText="";
+
+  for(let i = 0; i < gallerys.length; i++) {
+
+      const loop = gallerys[i];      
+      // Récupération de l'élément du DOM qui accueillera la gallery
+
+      // Création d’une balise dédiée à une photo
+      const figureElement = document.createElement("figure");
+      const imageElement = document.createElement("img");
+      imageElement.className = "imageStyleModal";
+      imageElement.src = loop.imageUrl;
+      imageElement.alt = loop.title;
+
+
+
+    console.log(figureElement);
+    
+    // On rattache la balise photo à la section gallery
+    modalGallery.appendChild(figureElement);
+    figureElement.appendChild(imageElement);
+
+  }
+}
+modalGallery(gallerys);
+
 // Le bouton Tous
 const btnAll = document.querySelector(".filterAll");
     btnAll.addEventListener("click", function () {
@@ -91,7 +121,7 @@ btnHotelResto.addEventListener("click",  function() {
 
            // Masquage modifier
            const modifierWrapper = document.querySelector(".modifier-wrapper");
-           modifierWrapper.setAttribute("style", "visibility: hidden");
+           modifierWrapper.setAttribute("style", "display : none");
       
     
     // Création du bandeau d'édition en haut de la page et modifier en haut de la galerie
@@ -122,7 +152,10 @@ btnHotelResto.addEventListener("click",  function() {
         const hidingFilters = document.querySelector(".filtres");
         hidingFilters.setAttribute("style", "display: none");
         // affichage modifier
-        modifierWrapper.setAttribute("style", "visibility: visible; ; margin-bottom: 50px");
+        modifierWrapper.setAttribute("style", "display: flex; ; padding-bottom: 80px");
+
+        const loginModifier = document.querySelector(".js-login-modifier");
+        loginModifier.setAttribute("style", "display: none");
 
 
 
@@ -134,6 +167,7 @@ let modal = null
 const openModal = function(event) {
   event.preventDefault()
   const target = document.querySelector(event.target.getAttribute("href"))
+  
   target.style.display = null
   target.removeAttribute("aria-hidden")
   target.setAttribute("aria-modal", "true")
@@ -141,6 +175,7 @@ const openModal = function(event) {
   modal.addEventListener ("click", closeModal)
   modal.querySelector(".js-modal-close").addEventListener("click", closeModal)
   modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation)
+
 }
 //fermeture de la modale
 const closeModal = function(event) {
