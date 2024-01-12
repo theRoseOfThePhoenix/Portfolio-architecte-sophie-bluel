@@ -292,8 +292,22 @@ button, input{
     margin: 30px 70px 70px 70px;
     justify-content: space-between;
 }
+
+.figure_modal{
+	position: relative;
+}
 .imageStyleModal{
 	width: 80px;
+}
+.fa-trash-can{
+	font-size: 10px;
+	border-radius: 2px;
+	padding: 4px;
+	position:absolute;
+	background-color: black;
+	color: white;
+	right: 6px;
+    top: 6px;
 }
 #contact textarea {
 	border: none;

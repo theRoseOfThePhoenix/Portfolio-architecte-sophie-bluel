@@ -33,7 +33,7 @@ function creatGallery(gallerys){
 }
 creatGallery(gallerys);
 
-
+//creation de la gallery dans la modal
 function modalGallery(gallerys){
 
   const modalGallery = document.querySelector(".modal_gallery")
@@ -47,21 +47,39 @@ function modalGallery(gallerys){
       // Création d’une balise dédiée à une photo
       const figureElement = document.createElement("figure");
       const imageElement = document.createElement("img");
+      const trashIcon = document.createElement("i");
+      figureElement.className ="figure_modal"
       imageElement.className = "imageStyleModal";
       imageElement.src = loop.imageUrl;
       imageElement.alt = loop.title;
-
-
+      trashIcon.classList.add("fa-solid", "fa-trash-can");
 
     console.log(figureElement);
     
     // On rattache la balise photo à la section gallery
     modalGallery.appendChild(figureElement);
     figureElement.appendChild(imageElement);
+    figureElement.appendChild(trashIcon);
 
   }
 }
 modalGallery(gallerys);
+
+// Fonction asynchrone pour supprimer une œuvre par son ID
+async function deleteWorks(id) {
+  const token = sessionStorage.getItem("token");
+  const response = await fetch("http://localhost:5678/api/works/" + id, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json;charset=utf-8",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    works = works.filter((work) => work.id !== id);
+    displayWork();
+  }
+}
 
 // Le bouton Tous
 const btnAll = document.querySelector(".filterAll");
