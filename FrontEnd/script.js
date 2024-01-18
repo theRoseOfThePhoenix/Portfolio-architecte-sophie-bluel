@@ -1,5 +1,3 @@
-
-
 let gallerys = await fetch('http://localhost:5678/api/works').then(works => works.json());
 
 console.log(gallerys)
@@ -19,7 +17,7 @@ function creatGallery(gallerys){
       const descriptionPhoto = document.createElement("figcaption");
       descriptionPhoto.innerText = loop.title; 
       const idElement = document.createElement("id");
-      idElement.id =  loop.categoryId;
+      idElement.id =  loop.id;
     
     console.log(idElement);
     console.log(figureElement);
@@ -33,59 +31,14 @@ function creatGallery(gallerys){
 }
 creatGallery(gallerys);
 
-//creation de la gallery dans la modal
-function modalGallery(gallerys){
 
-  const modalGallery = document.querySelector(".modal_gallery")
-  modalGallery.innerText="";
 
-  for(let i = 0; i < gallerys.length; i++) {
 
-      const loop = gallerys[i];      
-      // Récupération de l'élément du DOM qui accueillera la gallery
-
-      // Création d’une balise dédiée à une photo
-      const figureElement = document.createElement("figure");
-      const imageElement = document.createElement("img");
-      const trashIcon = document.createElement("i");
-      figureElement.className ="figure_modal"
-      imageElement.className = "imageStyleModal";
-      imageElement.src = loop.imageUrl;
-      imageElement.alt = loop.title;
-      trashIcon.classList.add("fa-solid", "fa-trash-can");
-
-    console.log(figureElement);
-    
-    // On rattache la balise photo à la section gallery
-    modalGallery.appendChild(figureElement);
-    figureElement.appendChild(imageElement);
-    figureElement.appendChild(trashIcon);
-
-  }
-}
-modalGallery(gallerys);
-
-// Fonction asynchrone pour supprimer une œuvre par son ID
-async function deleteWorks(id) {
-  const token = sessionStorage.getItem("token");
-  const response = await fetch("http://localhost:5678/api/works/" + id, {
-    method: "DELETE",
-    headers: {
-      Accept: "application/json;charset=utf-8",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (response.ok) {
-    works = works.filter((work) => work.id !== id);
-    displayWork();
-  }
-}
 
 // Le bouton Tous
 const btnAll = document.querySelector(".filterAll");
     btnAll.addEventListener("click", function () {
-      //remettre à zero
-      document.querySelector(".gallery").innerText = ""; 
+      document.querySelector(".gallery").innerText = "";       //remettre à zero
       creatGallery(gallerys);
       document.querySelectorAll(".filterCategories-btn").forEach(function(btn) {
       btn.classList.remove("active");
@@ -100,7 +53,7 @@ const btnAll = document.querySelector(".filterAll");
     const galleryObjets = gallerys.filter(function(gallerys) {
         return gallerys.category.id === 1;
     });
-    document.querySelector(".gallery").innerText = "";
+    document.querySelector(".gallery").innerText = "";      //remettre à zero
     creatGallery(galleryObjets);
     document.querySelectorAll(".filterCategories-btn").forEach(function(btn) {
         btn.classList.remove("active");
@@ -115,7 +68,7 @@ btnAppartements.addEventListener ("click",  function() {
     const galleryAppartements = gallerys.filter(function(gallerys) {
       return gallerys.category.id === 2;
     });
-    document.querySelector(".gallery").innerText = "";
+    document.querySelector(".gallery").innerText = "";      //remettre à zero
     creatGallery(galleryAppartements);
     document.querySelectorAll(".filterCategories-btn").forEach(function(btn) {
       btn.classList.remove("active");
@@ -129,7 +82,7 @@ btnHotelResto.addEventListener("click",  function() {
       const galleryHotelsRestaurants = gallerys.filter(function(gallerys) {
         return gallerys.category.id ===3;
       });
-      document.querySelector(".gallery").innerText = "";
+      document.querySelector(".gallery").innerText = "";      //remettre à zero
       creatGallery(galleryHotelsRestaurants);
       document.querySelectorAll(".filterCategories-btn").forEach(function(btn) {
         btn.classList.remove("active");
@@ -137,9 +90,9 @@ btnHotelResto.addEventListener("click",  function() {
     btnHotelResto.classList.add("active");
  });
 
-           // Masquage modifier
-           const modifierWrapper = document.querySelector(".modifier-wrapper");
-           modifierWrapper.setAttribute("style", "display : none");
+// Masquage modifier
+ const modifierWrapper = document.querySelector(".modifier-wrapper");
+ modifierWrapper.setAttribute("style", "display : none");
       
     
     // Création du bandeau d'édition en haut de la page et modifier en haut de la galerie
@@ -167,63 +120,11 @@ btnHotelResto.addEventListener("click",  function() {
    
 
         // Masquage des filtres
-        const hidingFilters = document.querySelector(".filtres");
-        hidingFilters.setAttribute("style", "display: none");
+  const hidingFilters = document.querySelector(".filtres");
+  hidingFilters.setAttribute("style", "display: none");
         // affichage modifier
-        modifierWrapper.setAttribute("style", "display: flex; ; padding-bottom: 80px");
-
-        const loginModifier = document.querySelector(".js-login-modifier");
-        loginModifier.setAttribute("style", "display: none");
-
-
-
-// modale1
-
-
-let modal = null
-//ouverture de la modale
-const openModal = function(event) {
-  event.preventDefault()
-  const target = document.querySelector(event.target.getAttribute("href"))
-  
-  target.style.display = null
-  target.removeAttribute("aria-hidden")
-  target.setAttribute("aria-modal", "true")
-  modal = target
-  modal.addEventListener ("click", closeModal)
-  modal.querySelector(".js-modal-close").addEventListener("click", closeModal)
-  modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation)
-
-}
-//fermeture de la modale
-const closeModal = function(event) {
-  if (modal === null) return
-  event.preventDefault()
-  modal.style.display = "none"
-  modal.setAttribute("aria-hidden", "true")
-  modal.removeAttribute("aria-modal")
-  modal.removeEventListener ("click", closeModal)
-  modal.querySelector(".js-modal-close").removeEventListener("click", closeModal)
-  modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation)
-  modal = null
-}
-// click au bouton uniquement
-const stopPropagation = function (event) {
-  event.stopPropagation()
-}
-
-document.querySelectorAll(".js-modal").forEach(a =>{
-  a.addEventListener("click", openModal)
-  
-})
-//fermeture par echape de la modale pour l'accecibillité
-
-window.addEventListener("keydown", function (event){
-  if (event.key === "Escape" || event.key === "Esc") {
-    closeModal (event)
-  }
-})
-
+  modifierWrapper.setAttribute("style", "display: flex; ; padding-bottom: 80px");
+  const loginModifier = document.querySelector(".js-login-modifier");
+  loginModifier.setAttribute("style", "display: none");
 
     }
-
