@@ -240,14 +240,14 @@ button, input{
 	padding: 15px;
 }
 
-.modal {
+.modal{
 	/* display: none; */
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: rgba(0, 0, 0, 0.8);
+	background: rgba(0, 0, 0, 0.4);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -270,7 +270,7 @@ button, input{
 	margin-top: 10px;
 }
 
-.modal-wrapper button {
+.close {
 	align-self: flex-end;
 	width: 2em;
 	height: 2em;
@@ -285,9 +285,10 @@ button, input{
     margin: 15px;
 }
 
-.fa-xmark{
+.fa-xmark, .fa-arrow-left{
 	font-size: 24px;
 	cursor: pointer;
+	background-color: white;
 }
 
 #titleModal{
@@ -332,6 +333,7 @@ button, input{
 	color: white;
 	right: 6px;
     top: 6px;
+	cursor: pointer;
 }
 
 #modaleAjout {
@@ -412,43 +414,33 @@ input[type="submit"]{
 	justify-content: center;
 	align-items: center;
 	align-content: space-around;
-	
-	position: relative;
 }
 
-#apercuPhotoDiv {
-	position: absolute;
-	background-color: #e8f1f6;
-	width: 100%;
-	height: 220px;
-	
-	
-	
+.containerImage {
+	background-color:#E8F1F6 ;
+	border-radius: 3px;
+	width: 420px;
+	height: 169px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 #apercuPhoto {
 	object-fit: cover;
 	height: 100%;
 	max-width: 100%;
-	position: absolute;
 	left: 50%;
 	transform: translateX(-50%);
-	
-	
-	
 }
 
 #drag_image .fa-image {
-	font-size: 80px;
-	color: #b9c5cc;
+	color: #B9C5CC;
+	font-size: 58px;
+	padding: 0.3em 0em 0.3em 0em;
 
 }
-
-#photo_form {
-	display: none;
-}
-
-.custom_button {
+.download_button{
 	border-radius: 30px;
 	background-color: #cbd6dc;
 	height: auto;
@@ -461,11 +453,17 @@ input[type="submit"]{
 	font-size: 20px;
 	color: #306685;
 	cursor: pointer;
-	
+}
+ #photo_form {
+	display: none;
+} 
+#custom_button {
+	display: none;	
 }
 #retour {
 	align-self: flex-start;
 	position: absolute;
+	background-color: white;
 }
 footer nav ul {
 	display: flex;

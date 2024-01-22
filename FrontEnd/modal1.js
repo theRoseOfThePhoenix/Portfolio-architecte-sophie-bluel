@@ -37,9 +37,7 @@ function modalGallery(gallerys){
     event.stopPropagation()
     deleteWorks(idElement);
   
-  });
-  
-  
+  });  
     }
   }
   modalGallery(gallerys);
@@ -47,13 +45,12 @@ function modalGallery(gallerys){
   
   // modale1
   let modal = null
+
   //ouverture de la modale
   const openModal = function(event) {
     event.preventDefault()
   const target = document.querySelector(event.target.getAttribute("href"))
     target.style.display = null
-    target.removeAttribute("aria-hidden")
-    target.setAttribute("aria-modal", "true")
     modal = target
     modal.addEventListener ("click", closeModal)
     modal.querySelector(".js-modal-close").addEventListener("click", closeModal)
@@ -65,24 +62,20 @@ function modalGallery(gallerys){
     if (modal === null) return
     event.preventDefault()
     modal.style.display = "none"
-    modal.setAttribute("aria-hidden", "true")
-    modal.removeAttribute("aria-modal")
-    modal.removeEventListener ("click", closeModal)
-    modal.querySelector(".js-modal-close").removeEventListener("click", closeModal)
     modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation)
     modal = null
   }
-  
+     //ouverture de la modal1 
+     document.querySelectorAll(".js-modal").forEach(a =>{
+        a.addEventListener("click", openModal)
+        
+       })
+      
   // click au bouton uniquement
   const stopPropagation = function (event) {
     event.stopPropagation()
   }
-  
-  document.querySelectorAll(".js-modal").forEach(a =>{
-    a.addEventListener("click", openModal)
-    
-  })
-  
+
   //fermeture par echape de la modale pour l'accecibillité
   window.addEventListener("keydown", function (event){
     if (event.key === "Escape" || event.key === "Esc") {
