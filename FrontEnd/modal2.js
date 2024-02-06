@@ -1,21 +1,19 @@
 // @ts-nocheck
 import { modalGallery } from "./modal1.js";
 import { creatGallery } from "./script.js";
-import { gallerys } from "./script.js";
+
+const formData = new FormData();
 // afficher modal2
 const btnAjouter = document.querySelector("#ajouter");
 btnAjouter.addEventListener("click", function (event) {
   event.preventDefault();
   const modale2 = document.querySelector("#modale2");
   modale2.style.display = "flex";
-
   document.querySelector(".close").addEventListener("click", closeModalAjouter);
-
   document
     .querySelector(".js-modal-stop")
     .addEventListener("click", stopPropagation);
 });
-
 //flêche retour
 const retour = document.querySelector("#retour");
 retour.addEventListener("click", function (event) {
@@ -51,18 +49,22 @@ const displayImage = document.querySelector(".containerImage");
 //boutton telecharger image
 document
   .querySelector(".download_button")
-  .addEventListener("click", handleDownloadButtonClick);
+  .addEventListener("click", downloadImage);
 
 // Gestionnaire d'événements pour le bouton télécharger dans la modale2
-function handleDownloadButtonClick(event) {
+function downloadImage(event) {
   const display = document.querySelector("#custom_button");
-  display.click(); //declecnhe l'ouverture du menu de selection de l'image a telecharger
-  event.preventDefault(); //empeche l'aparition d'un message dans le champ titre du formulaire
-  display.addEventListener("change", handleImageChange);
+  display.click(); //declecnhe l'ouverture du menu de selection de l'image à telecharger
+  event.preventDefault();
+  const creatImageOnce = function (event) {
+    createImage(event);
+    display.removeEventListener("change", creatImageOnce);
+  }; //empeche l'aparition d'un message dans le champ titre du formulaire
+  display.addEventListener("change", createImage);
 }
 
 // Gestionnaire d'événements pour le changement de l'image dans la modale2
-function handleImageChange(event) {
+function createImage(event) {
   //ecoute du changement du champ input file
   event.preventDefault();
   const file = event.target.files[0]; //acces au fichier par propriete files
@@ -76,35 +78,44 @@ function handleImageChange(event) {
   uploadImage.style.height = "220px";
   displayImage.appendChild(uploadImage);
 }
-//contenant les nouvelles informations de la nouvelle photo
-const formData = new FormData();
-//let modal1Open = false;
+// Réinitialisation de l'objet FormData après chaque soumission réussie
+function resetFormData() {
+  const formData = new FormData();
+}
 
 // Fonction asynchrone pour importer un nouvelle photo
 async function createWorks() {
-  const token = localStorage.getItem("token");
-  const response = await fetch("http://localhost:5678/api/works", {
-    method: "POST",
-    headers: {
-      Accept: "application/json;charset=utf-8",
-      Authorization: `Bearer ${token}`,
-    },
-    body: formData,
-  });
-  //modal1Open = true;
-  //Nouveau fetch de récupération des images stocker dans une variable
-  const works = await fetch("http://localhost:5678/api/works").then((works) =>
-    works.json()
-  );
-  //Vidage de la gallery et appel des fonction de creation de gallery avec le nouveau fetch en parametre
-  const sectionGalleryRefresh = document.querySelector(".gallery");
-  sectionGalleryRefresh.innerHTML = "";
-  creatGallery(works);
-  modalGallery(works);
+  try {
+    const token = localStorage.getItem("token");
+    const response = await fetch("http://localhost:5678/api/works", {
+      method: "POST",
+      headers: {
+        Accept: "application/json;charset=utf-8",
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+    console.log(response);
+    //modal1Open = true;
+    //Nouveau fetch de récupération des images stocker dans une variable
+    const works = await fetch("http://localhost:5678/api/works").then((works) =>
+      works.json()
+    );
+    //Vidage de la gallery et appel des fonction de creation de gallery avec le nouveau fetch en parametre
+    const sectionGalleryRefresh = document.querySelector(".gallery");
+    sectionGalleryRefresh.innerHTML = "";
+    creatGallery(works);
+    modalGallery(works);
+    resetFormData();
+  } catch (error) {
+    console.error("Erreur lors de la création de l'œuvre:", error);
+  }
 }
 
 const btnValider = document.querySelector("#form_photo");
-btnValider.addEventListener("submit", async (event) => {
+btnValider.addEventListener("submit", checkForm);
+
+function checkForm(event) {
   event.preventDefault();
   //ajout du titre et de la catégorie dans l'objet
   const photoTitre = document.querySelector("#titre_photo").value;
@@ -112,7 +123,6 @@ btnValider.addEventListener("submit", async (event) => {
   const photoCategorie = document.querySelector("#categorie_photo").value;
   formData.append("category", photoCategorie);
   //displayImage.innerHTML = "";
-
   createWorks();
   const modale2 = document.querySelector("#modale2");
   modale2.style.display = "none";
@@ -120,8 +130,9 @@ btnValider.addEventListener("submit", async (event) => {
   modale1.style.display = "flex";
   btnValider.reset();
   resetModalImage();
-});
+}
 
+// réinitialisation de la modal téléchargement
 async function resetModalImage() {
   const modale2 = document.querySelector("#modale2");
   const displayImageModal2 = modale2.querySelector(".containerImage");
@@ -134,18 +145,20 @@ async function resetModalImage() {
   `;
   document
     .querySelector(".download_button")
-    .addEventListener("click", handleDownloadButtonClick);
+    .addEventListener("click", downloadImage);
   //inputFileModal2.value = "";
   if (inputFileModal2) {
-    inputFileModal2.addEventListener("change", handleImageChange);
+    inputFileModal2.addEventListener("change", createImage);
   }
+  const btnValider = document.querySelector("#form_photo");
+  btnValider.addEventListener("submit", checkForm);
 }
 
-// Check de la limite de 4mo de l'image
-let uploadLimit = document.querySelector("#custom_button");
-uploadLimit.onchange = function () {
-  if (photo_form.files[0].size > 4194304) {
-    alert("Fichier trop volumineux");
-    photo_form.value = "";
-  }
-};
+// // Check de la limite de 4mo de l'image
+// let uploadLimit = document.querySelector("#custom_button");
+// uploadLimit.onchange = function () {
+//   if (photo_form.files[0].size > 4194304) {
+//     alert("Fichier trop volumineux");
+//     photo_form.value = "";
+//   }
+// };

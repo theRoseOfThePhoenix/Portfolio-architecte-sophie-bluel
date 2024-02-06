@@ -22,7 +22,7 @@ export function modalGallery(gallerys) {
     trashIcon.classList.add("fa-solid", "fa-trash-can"); //btn trash
 
     // console.log(idElement);
-    console.log(figureElement);
+    // console.log(figureElement);
     // On rattache la balise photo à la section gallery
     modalGallery.appendChild(figureElement);
     figureElement.appendChild(imageElement);
@@ -37,7 +37,7 @@ export function modalGallery(gallerys) {
     });
   }
 }
-console.log(modal1);
+// console.log(modal1);
 modalGallery(gallerys);
 
 // modale1
