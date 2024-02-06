@@ -51,29 +51,35 @@ const displayImage = document.querySelector(".containerImage");
 //boutton telecharger image
 document
   .querySelector(".download_button")
-  .addEventListener("click", (event) => {
-    const display = document.querySelector("#custom_button");
-    display.click(); //declecnhe l'ouverture du menu de selection de l'image a telecharger
-    event.preventDefault(); //empeche l'aparition d'un message dans le champ titre du formulaire
-    display.addEventListener("change", (event) => {
-      //ecoute du changement du champ input file
-      event.preventDefault();
-      const file = event.target.files[0]; //acces au fichier par propriete files
+  .addEventListener("click", handleDownloadButtonClick);
 
-      formData.append("image", file); //ajout du fichier dans l'objet formData
-      displayImage.innerHTML = ""; //effacement du contenu du cadre image
-      //affichage de l'image dans le cadre
-      const uploadImage = document.createElement("img");
-      uploadImage.src = URL.createObjectURL(file);
-      uploadImage.alt = "Nouvelle Image";
-      uploadImage.style.height = "220px";
-      displayImage.appendChild(uploadImage);
-    });
-  });
+// Gestionnaire d'événements pour le bouton télécharger dans la modale2
+function handleDownloadButtonClick(event) {
+  const display = document.querySelector("#custom_button");
+  display.click(); //declecnhe l'ouverture du menu de selection de l'image a telecharger
+  event.preventDefault(); //empeche l'aparition d'un message dans le champ titre du formulaire
+  display.addEventListener("change", handleImageChange);
+}
+
+// Gestionnaire d'événements pour le changement de l'image dans la modale2
+function handleImageChange(event) {
+  //ecoute du changement du champ input file
+  event.preventDefault();
+  const file = event.target.files[0]; //acces au fichier par propriete files
+
+  formData.append("image", file); //ajout du fichier dans l'objet formData
+  displayImage.innerHTML = ""; //effacement du contenu du cadre image
+  //affichage de l'image dans le cadre
+  const uploadImage = document.createElement("img");
+  uploadImage.src = URL.createObjectURL(file);
+  uploadImage.alt = "Nouvelle Image";
+  uploadImage.style.height = "220px";
+  displayImage.appendChild(uploadImage);
+}
 //contenant les nouvelles informations de la nouvelle photo
 const formData = new FormData();
-console.log(formData);
-let modal1Open = false;
+//let modal1Open = false;
+
 // Fonction asynchrone pour importer un nouvelle photo
 async function createWorks() {
   const token = localStorage.getItem("token");
@@ -85,8 +91,7 @@ async function createWorks() {
     },
     body: formData,
   });
-
-  modal1Open = true;
+  //modal1Open = true;
   //Nouveau fetch de récupération des images stocker dans une variable
   const works = await fetch("http://localhost:5678/api/works").then((works) =>
     works.json()
@@ -99,20 +104,48 @@ async function createWorks() {
 }
 
 const btnValider = document.querySelector("#form_photo");
-btnValider.addEventListener("submit", (event) => {
+btnValider.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  //ajout du titre et de la catégorie dans l'objet
   const photoTitre = document.querySelector("#titre_photo").value;
   formData.append("title", photoTitre);
   const photoCategorie = document.querySelector("#categorie_photo").value;
   formData.append("category", photoCategorie);
+  //displayImage.innerHTML = "";
 
   createWorks();
-  event.preventDefault();
-  if (!modal1Open) {
-    const modale2 = document.querySelector("#modale2");
-    modale2.style.display = "none";
-    const modale1 = document.querySelector("#modal1");
-    modale1.style.display = "flex";
-    btnValider.reset();
-    event.preventDefault();
-  }
+  const modale2 = document.querySelector("#modale2");
+  modale2.style.display = "none";
+  const modale1 = document.querySelector("#modal1");
+  modale1.style.display = "flex";
+  btnValider.reset();
+  resetModalImage();
 });
+
+async function resetModalImage() {
+  const modale2 = document.querySelector("#modale2");
+  const displayImageModal2 = modale2.querySelector(".containerImage");
+  const inputFileModal2 = modale2.querySelector("#custom_button");
+  displayImageModal2.innerHTML = `
+  <i class="fa-solid fa-image"></i>
+  <input type="file" id="custom_button" />
+  <button class="download_button">+ Ajouter photo</button>
+  <p class="conditionPix">jpn, png : 4mo max</p>
+  `;
+  document
+    .querySelector(".download_button")
+    .addEventListener("click", handleDownloadButtonClick);
+  //inputFileModal2.value = "";
+  if (inputFileModal2) {
+    inputFileModal2.addEventListener("change", handleImageChange);
+  }
+}
+
+// Check de la limite de 4mo de l'image
+let uploadLimit = document.querySelector("#custom_button");
+uploadLimit.onchange = function () {
+  if (photo_form.files[0].size > 4194304) {
+    alert("Fichier trop volumineux");
+    photo_form.value = "";
+  }
+};

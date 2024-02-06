@@ -30,10 +30,10 @@ export function modalGallery(gallerys) {
 
     //btn trash ecoute devenement
     trashIcon.addEventListener("click", (event) => {
-      deleteWorks(idElement);
-      modal1.style.display = "flex";
       event.preventDefault();
       event.stopPropagation();
+      deleteWorks(idElement);
+      modal1.style.display = "flex";
     });
   }
 }
@@ -87,25 +87,18 @@ async function deleteWorks(idElement) {
         Accept: "application/json;charset=utf-8",
         Authorization: `Bearer ${token}`,
       },
-    }).then((response) => {
-      if (response.ok) {
-        const figureElement = document.getElementById(idElement);
-
-        if (figureElement) {
-          figureElement.remove();
-        }
-      }
-      /*
-      const works = fetch("http://localhost:5678/api/works").then((works) =>
-          works.json()
-        );
-        const sectionGalleryRefresh = document.querySelector(".gallery");
-        const modalGalleryReferesh = document.querySelector(".modal_gallery");
-        sectionGalleryRefresh.innerHTML = "";
-        modalGalleryReferesh.innerHTML = "";
-        creatGallery(works);
-        modalGallery(works);
-        */
     });
+    const figureElement = document.getElementById(idElement);
+    figureElement.remove();
+    const works = await fetch("http://localhost:5678/api/works").then((works) =>
+      works.json()
+    );
+    const sectionGalleryRefresh = document.querySelector(".gallery");
+    const modalGalleryReferesh = document.querySelector(".modal_gallery");
+    sectionGalleryRefresh.innerHTML = "";
+    modalGalleryReferesh.innerHTML = "";
+
+    modalGallery(works);
+    creatGallery(works);
   }
 }
