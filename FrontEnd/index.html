@@ -16,10 +16,6 @@
     ></script>
     <meta name="description" content="" />
     <link rel="stylesheet" href="./assets/style.css" />
-    <script src="/FrontEnd/script.js" type="module" defer></script>
-    <script src="/FrontEnd/login.js" type="module" defer></script>
-    <script src="/FrontEnd/modal1.js" type="module" defer></script>
-    <script src="/FrontEnd/modal2.js" type="module" defer></script>
   </head>
   <body>
     <div class="bandeau">
@@ -104,6 +100,7 @@
           </aside>
 
           <!--modal2-->
+
           <aside id="modale2" class="modal" style="display: none">
             <!--Fenêtre d'ajout des photos-->
             <section class="modal-wrapper js-modal-stop" id="outsideModale2">
@@ -117,17 +114,22 @@
 
               <form id="form_photo">
                 <div id="drag_image">
-                  <div class="containerImage">
+                  <div id="apercuPhotoDiv" style="display: none;">
+                    <img id="apercuPhoto"> <!--Aperçu de la photo uploadé ici-->
+                  </div>
+                  <!-- <div class="containerImage"> -->
                     <i class="fa-solid fa-image"></i>
                     <input
                       type="file"
                       id="custom_button"
                       accept=".jpg, .jpeg, .png"
+                      required
                     />
                     <button class="download_button">+ Ajouter photo</button>
                     <p class="conditionPix">jpn, png : 4mo max</p>
-                  </div>
+                  <!-- </div> -->
                 </div>
+
                 <label for="titre_photo">Titre</label>
                 <input type="text" required name="title" id="titre_photo" />
                 <label for="categorie_photo">Catégorie</label>
@@ -179,5 +181,8 @@
         </ul>
       </nav>
     </footer>
+    <script src="/FrontEnd/script.js" type="module"></script>
+    <script src="/FrontEnd/modal1.js" type="module"></script>
+    <script src="/FrontEnd/modal2.js" type="module"></script>
   </body>
 </html>

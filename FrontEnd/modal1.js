@@ -75,8 +75,8 @@ const stopPropagation = function (event) {
 };
 
 // Fonction asynchrone pour supprimer une photo par son ID
-async function deleteWorks(idElement) {
-  console.log(idElement);
+export async function deleteWorks(idElement) {
+  //console.log(idElement);
 
   const imageElement = idElement;
   if (imageElement) {
