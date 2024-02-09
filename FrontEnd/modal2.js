@@ -2,8 +2,6 @@
 import { modalGallery } from "./modal1.js";
 import { creatGallery } from "./script.js";
 
-let formData = new FormData();
-
 // afficher modal2
 const btnAjouter = document.querySelector("#ajouter");
 btnAjouter.addEventListener("click", function (event) {
@@ -50,38 +48,37 @@ const stopPropagation = function (event) {
 //boutton telecharger image
 const displayImage = document.querySelector("#apercuPhotoDiv");
 
-// document
-//   .querySelector(".download_button")
-//   .removeEventListener("click", downloadImage);
-document
-  .querySelector(".download_button")
-  .addEventListener("click", downloadImage);
+document.querySelector(".cust_button").addEventListener("click", downloadImage);
 
 // Gestionnaire d'événements pour le bouton télécharger dans la modale2
+
 function downloadImage(event) {
   const display = document.querySelector("#custom_button");
-  display.click(); //declecnhe l'ouverture du menu de selection de l'image à telecharger
-  event.preventDefault(); //empeche l'aparition d'un message dans le champ titre du formulaire
-
-  //display.removeEventListener("change", createImage);
+  // Supprimez d'abord tout gestionnaire d'événements 'change' précédent, s'il y en a
+  display.removeEventListener("change", createImage);
+  display.click(); // Déclenche l'ouverture du menu de sélection de l'image à télécharger
+  event.preventDefault(); // Empêche l'apparition d'un message dans le champ titre du formulaire
+  // Ensuite, ajoutez le nouvel écouteur d'événement 'change'
   display.addEventListener("change", createImage);
 }
 
 // Gestionnaire d'événements pour le changement de l'image dans la modale2
-async function createImage(event) {
+
+function createImage(event) {
   //ecoute du changement du champ input file
   event.preventDefault();
-  const file = event.target.files[0]; //acces au fichier par propriete files
-  formData.append("image", file); //ajout du fichier dans l'objet formData
+  let file = event.target.files[0]; //acces au fichier par propriete files
+
   //affichage de l'image dans le cadre
   let url = URL.createObjectURL(file);
   const uploadImage = document.querySelector("#apercuPhoto");
   const uploadImageDiv = document.querySelector("#apercuPhotoDiv");
   uploadImage.src = url;
-  //uploadImage.alt = "Nouvelle Image de Sophie Bluel";
+  uploadImage.alt = "Nouvelle Image de Sophie Bluel";
   uploadImageDiv.setAttribute("style", "display: flex");
+  console.log(url);
 }
-
+let formData = new FormData();
 // Fonction asynchrone pour importer un nouvelle photo
 async function createWorks() {
   try {
@@ -117,22 +114,22 @@ async function createWorks() {
 }
 
 const btnValider = document.querySelector("#form_photo");
-//btnValider.removeEventListener("submit", checkForm);
 btnValider.addEventListener("submit", checkForm);
 
-function checkForm(event) {
+async function checkForm(event) {
   event.preventDefault();
+  formData = new FormData();
+  let nouvellePhoto = document.querySelector("#custom_button");
+  formData.append("image", nouvellePhoto.files[0]); //ajout du fichier dans l'objet formData
   //ajout du titre et de la catégorie dans l'objet
   let photoTitre = document.querySelector("#titre_photo").value;
   formData.append("title", photoTitre);
   let photoCategorie = document.querySelector("#categorie_photo").value;
   formData.append("category", photoCategorie);
-  //displayImage.innerHTML = "";
   createWorks();
   const modale2 = document.querySelector("#modale2");
   modale2.style.display = "none";
   const modale1 = document.querySelector("#modal1");
   modale1.style.display = "none";
   btnValider.reset();
-  //resetModalImage();
 }

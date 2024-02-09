@@ -21,8 +21,8 @@ export function modalGallery(gallerys) {
     imageElement.alt = loop.title;
     trashIcon.classList.add("fa-solid", "fa-trash-can"); //btn trash
 
-    console.log(idElement);
-    console.log(figureElement);
+    // console.log(idElement);
+    // console.log(figureElement);
     // On rattache la balise photo à la section gallery
     modalGallery.appendChild(figureElement);
     figureElement.appendChild(imageElement);

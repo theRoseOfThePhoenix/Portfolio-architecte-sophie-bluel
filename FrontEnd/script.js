@@ -19,8 +19,8 @@ export function creatGallery(gallerys) {
     descriptionPhoto.innerText = loop.title;
     const idElement = document.createElement("id");
     idElement.id = loop.id;
-    console.log(idElement);
-    console.log(figureElement);
+    // console.log(idElement);
+    // console.log(figureElement);
 
     // On rattache la balise photo à la section gallery
 
