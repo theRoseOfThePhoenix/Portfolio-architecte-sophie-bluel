@@ -3,7 +3,7 @@ export let gallerys = await fetch("http://localhost:5678/api/works").then(
   (works) => works.json()
 );
 
-//console.log(gallerys);
+console.log(gallerys);
 
 export function creatGallery(gallerys) {
   for (let i = 0; i < gallerys.length; i++) {
@@ -19,8 +19,8 @@ export function creatGallery(gallerys) {
     descriptionPhoto.innerText = loop.title;
     const idElement = document.createElement("id");
     idElement.id = loop.id;
-    //console.log(idElement);
-    //console.log(figureElement);
+    console.log(idElement);
+    console.log(figureElement);
 
     // On rattache la balise photo à la section gallery
 

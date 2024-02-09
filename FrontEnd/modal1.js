@@ -21,8 +21,8 @@ export function modalGallery(gallerys) {
     imageElement.alt = loop.title;
     trashIcon.classList.add("fa-solid", "fa-trash-can"); //btn trash
 
-    // console.log(idElement);
-    // console.log(figureElement);
+    console.log(idElement);
+    console.log(figureElement);
     // On rattache la balise photo à la section gallery
     modalGallery.appendChild(figureElement);
     figureElement.appendChild(imageElement);
@@ -37,7 +37,7 @@ export function modalGallery(gallerys) {
     });
   }
 }
-// console.log(modal1);
+console.log(modal1);
 modalGallery(gallerys);
 
 // modale1
@@ -76,7 +76,7 @@ const stopPropagation = function (event) {
 
 // Fonction asynchrone pour supprimer une photo par son ID
 export async function deleteWorks(idElement) {
-  //console.log(idElement);
+  console.log(idElement);
 
   const imageElement = idElement;
   if (imageElement) {
