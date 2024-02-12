@@ -279,7 +279,7 @@ li:hover {
 #login input,
 #form_photo select,
 #form_photo option,
-#titre_form {
+#titre_photo {
   height: 50px;
   font-size: 1.2em;
   border: none;
@@ -288,7 +288,7 @@ li:hover {
 #contact label,
 #login label,
 #form_photo label {
-  margin: 2em 0 1em 0;
+  margin: 2em 0 0.5em 0;
 }
 #login,
 a {
@@ -345,7 +345,7 @@ input {
 .modal-wrapper {
   background-color: white;
   border-radius: 10px;
-  width: 700px;
+  width: 630px;
   height: 700px;
   padding: 20px;
   display: flex;
@@ -401,9 +401,9 @@ input {
 .modal_gallery {
   display: flex;
   flex-wrap: wrap;
-  gap: 30px 10px;
+  gap: 30px 22px;
   margin: 30px 70px 70px 70px;
-  justify-content: center;
+  justify-content: flex-start;
 }
 .btn_editor2 {
   align-self: center;
@@ -450,7 +450,7 @@ input {
   padding: 10px;
 }
 hr {
-  margin: 0 80px 0 80px;
+  margin: 60px 80px 0 80px;
 }
 
 input[type="submit"] {
@@ -482,7 +482,7 @@ input[type="submit"] {
 }
 
 #form_photo select,
-#titre_form {
+#titre_photo {
   background-color: white;
   font-family: "Work Sans";
   font-size: 15px;
@@ -506,10 +506,10 @@ input[type="submit"] {
 }
 
 #apercuPhotoDiv {
-	position: absolute;
-	background-color: #e8f1f6;
-	width: 100%;
-	height: 220px;
+  position: absolute;
+  background-color: #e8f1f6;
+  width: 100%;
+  height: 220px;
 }
 
 #apercuPhoto {
@@ -524,9 +524,9 @@ input[type="submit"] {
 #drag_image .fa-image {
   color: #b9c5cc;
   font-size: 58px;
-  padding: 0.3em 0em 0.3em 0em;
+  padding: 0.3em 0em 0em 0em;
 }
-.download_button {
+.cust_button {
   border-radius: 30px;
   background-color: #cbd6dc;
   height: auto;

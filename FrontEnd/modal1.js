@@ -1,49 +1,77 @@
 // @ts-nocheck
-//creation de la gallery dans la modal
+// Importation des fonctions nécessaires depuis le script principal
 import { creatGallery, gallerys } from "./script.js";
 
-export function modalGallery(gallerys) {
-  const modalGallery = document.querySelector(".modal_gallery");
-  const modal1 = document.querySelector("#modal1");
-  modalGallery.innerHTML = "";
+// Fonction asynchrone pour supprimer une œuvre par son ID
+export async function deleteWorks(idElement) {
+  try {
+    const token = localStorage.getItem("token"); // récupération du token de l'utilisateur depuis le localStorage
 
-  for (let i = 0; i < gallerys.length; i++) {
-    // Récupération de l'élément du DOM qui accueillera la gallery
-    const loop = gallerys[i];
-    // Création d’une balise dédiée à une photo
-    const figureElement = document.createElement("figure");
-    const imageElement = document.createElement("img");
-    const trashIcon = document.createElement("i");
-    const idElement = loop.id;
+    await fetch(`http://localhost:5678/api/works/${idElement}`, {
+      // appel API pour supprimer l'œuvre spécifiée par idElement
+      method: "DELETE",
+      headers: {
+        Accept: "application/json;charset=utf-8",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Rafraîchissement des galeries après la suppression
+    const works = await fetch("http://localhost:5678/api/works").then(
+      // appel API pour récupérer les œuvres mises à jour
+      (response) => response.json()
+    );
+
+    document.querySelector(".gallery").innerHTML = ""; // nettoyage des contenus
+    document.querySelector(".modal_gallery").innerHTML = ""; // nettoyage des contenus
+
+    modalGallery(works); // rapelle des galeries mis à jour
+    creatGallery(works); // rapelle des galeries mis à jour
+  } catch (error) {
+    // erreurs éventuelles lors de l'appel API
+    console.error("Erreur lors de la suppression de l'œuvre : ", error);
+  }
+}
+
+// Fonction pour créer et afficher la galerie dans une modale
+export function modalGallery(gallerys) {
+  const modalGallery = document.querySelector(".modal_gallery"); // élément du DOM destiné à la galerie modale
+
+  modalGallery.innerHTML = ""; // nettoyage des contenus
+
+  // Itération sur chaque œuvre pour créer et afficher son élément correspondant
+  gallerys.forEach((loop) => {
+    const figureElement = document.createElement("figure"); // création DOm pour chaque œuvre
+    const imageElement = document.createElement("img"); // création DOm pour chaque œuvre
+    const trashIcon = document.createElement("i"); // création DOm pour chaque œuvre
+
+    // classes et attributs nécessaires
     figureElement.className = "figure_modal";
     imageElement.className = "imageStyleModal";
     imageElement.src = loop.imageUrl;
     imageElement.alt = loop.title;
-    trashIcon.classList.add("fa-solid", "fa-trash-can"); //btn trash
-
-    // console.log(idElement);
-    // console.log(figureElement);
-    // On rattache la balise photo à la section gallery
-    modalGallery.appendChild(figureElement);
+    trashIcon.classList.add("fa-solid", "fa-trash-can");
+    console.log(imageElement);
+    // Assemblage des éléments et ajout au DOM
     figureElement.appendChild(imageElement);
-    figureElement.appendChild(trashIcon); //btn trash
-
-    //btn trash ecoute devenement
-    trashIcon.addEventListener("click", (event) => {
+    figureElement.appendChild(trashIcon);
+    modalGallery.appendChild(figureElement);
+    console.log(figureElement);
+    // Ajout d'un écouteur d'événement pour la suppression de l'œuvre
+    trashIcon.addEventListener("click", async (event) => {
       event.preventDefault();
-      event.stopPropagation();
-      deleteWorks(idElement);
-      modal1.style.display = "flex";
+      // Appel de la fonction de suppression en passant l'ID de l'œuvre
+      await deleteWorks(loop.id);
     });
-  }
+  });
 }
-console.log(modal1);
+
 modalGallery(gallerys);
 
-// modale1
+// // modale1
 let modal = null;
 
-//ouverture de la modale
+// //ouverture de la modale
 const openModal = function (event) {
   const target = document.querySelector(event.target.getAttribute("href"));
   event.preventDefault();
@@ -55,7 +83,7 @@ const openModal = function (event) {
     .addEventListener("click", stopPropagation);
 };
 
-//fermeture de la modale
+// //fermeture de la modale
 const closeModal = function (event) {
   event.preventDefault();
   if (modal === null) return;
@@ -65,7 +93,7 @@ const closeModal = function (event) {
     .removeEventListener("click", stopPropagation);
   modal = null;
 };
-//ouverture de la modal1
+// //ouverture de la modal1
 document.querySelectorAll(".js-modal").forEach((a) => {
   a.addEventListener("click", openModal);
 });
@@ -73,32 +101,3 @@ document.querySelectorAll(".js-modal").forEach((a) => {
 const stopPropagation = function (event) {
   event.stopPropagation();
 };
-
-// Fonction asynchrone pour supprimer une photo par son ID
-export async function deleteWorks(idElement) {
-  console.log(idElement);
-
-  const imageElement = idElement;
-  if (imageElement) {
-    const token = localStorage.getItem("token");
-    fetch("http://localhost:5678/api/works/" + idElement, {
-      method: "DELETE",
-      headers: {
-        Accept: "application/json;charset=utf-8",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const figureElement = document.getElementById(idElement);
-    figureElement.remove();
-    const works = await fetch("http://localhost:5678/api/works").then((works) =>
-      works.json()
-    );
-    const sectionGalleryRefresh = document.querySelector(".gallery");
-    const modalGalleryReferesh = document.querySelector(".modal_gallery");
-    sectionGalleryRefresh.innerHTML = "";
-    modalGalleryReferesh.innerHTML = "";
-
-    modalGallery(works);
-    creatGallery(works);
-  }
-}

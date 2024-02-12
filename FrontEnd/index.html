@@ -139,6 +139,7 @@
                 <input type="text" required name="title" id="titre_photo" />
                 <label for="categorie_photo">Catégorie</label>
                 <select name="category" id="categorie_photo">
+                  <option value="0">Selectionner une catégorie</option>
                   <option value="1">Objets</option>
                   <option value="2">Appartements</option>
                   <option value="3">Hôtels & restaurants</option>
@@ -154,11 +155,22 @@
 
         <div class="filtres">
           <button class="filterCategories-btn filterAll">Tous</button>
-          <button class="filterCategories-btn filterObjects">Objets</button>
-          <button class="filterCategories-btn fitlerApartments">
+          <button
+            class="filterCategories-btn filterObjects"
+            data-category-id="1"
+          >
+            Objets
+          </button>
+          <button
+            class="filterCategories-btn fitlerApartments"
+            data-category-id="2"
+          >
             Appartements
           </button>
-          <button class="filterCategories-btn filterHotelsRestaurants">
+          <button
+            class="filterCategories-btn filterHotelsRestaurants"
+            data-category-id="3"
+          >
             Hôtels & restaurants
           </button>
         </div>
