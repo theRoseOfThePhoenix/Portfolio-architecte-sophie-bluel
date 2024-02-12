@@ -1,89 +1,65 @@
 // @ts-nocheck
+
+// Importations nécessaires
 import { modalGallery } from "./modal1.js";
 import { creatGallery } from "./script.js";
 
-// afficher modal2
+// Sélecteurs DOM
+const modale2 = document.querySelector("#modale2");
 const btnAjouter = document.querySelector("#ajouter");
-btnAjouter.addEventListener("click", function (event) {
+const btnFermer = modale2.querySelector(".close");
+const btnStopPropagation = modale2.querySelector(".js-modal-stop");
+const btnRetour = document.querySelector("#retour");
+const apercuPhotoDiv = document.querySelector("#apercuPhotoDiv");
+const inputImage = document.querySelector("#custom_button");
+const apercuPhoto = document.querySelector("#apercuPhoto");
+
+// Affichage de la modal d'ajout (modal2)
+btnAjouter.addEventListener("click", (event) => {
   event.preventDefault();
-  const modale2 = document.querySelector("#modale2");
   modale2.style.display = "flex";
-  document.querySelector(".close").addEventListener("click", closeModalAjouter);
-  document
-    .querySelector(".js-modal-stop")
-    .addEventListener("click", stopPropagation);
 });
 
-//flêche retour
-const retour = document.querySelector("#retour");
-retour.addEventListener("click", function (event) {
+// Fermeture de modal2
+btnFermer.addEventListener("click", closeModalAjouter);
+btnStopPropagation.addEventListener("click", stopPropagation);
+
+// Retour à modal1
+btnRetour.addEventListener("click", (event) => {
   event.preventDefault();
-  const modale2 = document.querySelector("#modale2");
   modale2.style.display = "none";
-  const modale1 = document.querySelector("#modal1");
-  modale1.style.display = "flex";
+  document.querySelector("#modal1").style.display = "flex";
 });
 
-//fermer la modal d'ajout
-const closeModalAjouter = function (event) {
+// fonction que fait la fermeture de la modal2
+function closeModalAjouter(event) {
   event.preventDefault();
-  const modale2 = document.querySelector("#modale2");
-  if (modale2 === null) return;
   modale2.style.display = "none";
+}
 
-  modale2
-    .querySelector(".js-modal-stop")
-    .removeEventListener("click", stopPropagation);
-
-  const modale1 = document.querySelector("#modal1");
-  modale1.style.display = "none";
-};
-
-// click au bouton uniquement
-const stopPropagation = function (event) {
+// fonction qui stoppe la propagation de l'événement de clic
+function stopPropagation(event) {
   event.stopPropagation();
-  event.preventDefault();
-};
-
-//boutton telecharger image
-const displayImage = document.querySelector("#apercuPhotoDiv");
-
-document.querySelector(".cust_button").addEventListener("click", downloadImage);
-
-// Gestionnaire d'événements pour le bouton télécharger dans la modale2
-
-function downloadImage(event) {
-  const display = document.querySelector("#custom_button");
-  // Supprimez d'abord tout gestionnaire d'événements 'change' précédent, s'il y en a
-  display.removeEventListener("change", createImage);
-  display.click(); // Déclenche l'ouverture du menu de sélection de l'image à télécharger
-  event.preventDefault(); // Empêche l'apparition d'un message dans le champ titre du formulaire
-  // Ensuite, ajoutez le nouvel écouteur d'événement 'change'
-  display.addEventListener("change", createImage);
 }
 
-// Gestionnaire d'événements pour le changement de l'image dans la modale2
+inputImage.addEventListener("change", createImage); // téléchargement de l'image
 
+// Fonction pour créer et afficher l'image téléchargée
 function createImage(event) {
-  //ecoute du changement du champ input file
-  event.preventDefault();
-  let file = event.target.files[0]; //acces au fichier par propriete files
-
-  //affichage de l'image dans le cadre
+  let file = event.target.files[0];
   let url = URL.createObjectURL(file);
-  const uploadImage = document.querySelector("#apercuPhoto");
-  const uploadImageDiv = document.querySelector("#apercuPhotoDiv");
-  uploadImage.src = url;
-  uploadImage.alt = "Nouvelle Image de Sophie Bluel";
-  uploadImageDiv.setAttribute("style", "display: flex");
-  console.log(url);
+  apercuPhoto.src = url;
+  apercuPhoto.alt = "Nouvelle Image de Sophie Bluel";
+  apercuPhotoDiv.style.display = "flex";
 }
-let formData = new FormData();
-// Fonction asynchrone pour importer un nouvelle photo
+let formData = new FormData(); // Ajoutez des données à formData si nécessaire
+
+// Fonction asynchrone pour importer une nouvelle photo
 async function createWorks() {
   try {
     const token = localStorage.getItem("token");
-    const response = await fetch("http://localhost:5678/api/works", {
+
+    await fetch("http://localhost:5678/api/works", {
       method: "POST",
       headers: {
         Accept: "application/json;charset=utf-8",
@@ -91,7 +67,6 @@ async function createWorks() {
       },
       body: formData,
     });
-    console.log(response);
 
     //on cache la div de l'image uploeadé et on vide la source
     const uploadImageDiv = document.querySelector("#apercuPhotoDiv");
@@ -99,18 +74,21 @@ async function createWorks() {
     const uploadImage = document.querySelector("#apercuPhoto");
     uploadImage.src = "";
 
-    //Nouveau fetch de récupération des images stocker dans une variable
-    const works = await fetch("http://localhost:5678/api/works").then((works) =>
-      works.json()
-    );
-    //Vidage de la gallery et appel des fonction de creation de gallery avec le nouveau fetch en parametre
-    const sectionGalleryRefresh = document.querySelector(".gallery");
-    sectionGalleryRefresh.innerHTML = "";
-    creatGallery(works);
-    modalGallery(works);
+    // Rafraîchissement des galeries
+    refreshGalleries();
   } catch (error) {
     console.error("Erreur lors de la création de l'œuvre:", error);
   }
+}
+
+// Fonction pour rafraîchir les galeries
+async function refreshGalleries() {
+  const works = await fetch("http://localhost:5678/api/works").then((works) =>
+    works.json()
+  );
+  document.querySelector(".gallery").innerHTML = "";
+  creatGallery(works);
+  modalGallery(works);
 }
 
 const btnValider = document.querySelector("#form_photo");
@@ -118,18 +96,39 @@ btnValider.addEventListener("submit", checkForm);
 
 async function checkForm(event) {
   event.preventDefault();
+  // Initialisation de formData pour chaque soumission pour éviter d'ajouter des données en double
   formData = new FormData();
-  let nouvellePhoto = document.querySelector("#custom_button");
-  formData.append("image", nouvellePhoto.files[0]); //ajout du fichier dans l'objet formData
-  //ajout du titre et de la catégorie dans l'objet
+  let nouvellePhoto = document.querySelector("#custom_button").files[0];
   let photoTitre = document.querySelector("#titre_photo").value;
-  formData.append("title", photoTitre);
   let photoCategorie = document.querySelector("#categorie_photo").value;
+  // Validation du titre
+  if (!photoTitre.trim()) {
+    alert("Veuillez renseigner le titre de la photo.");
+    return;
+  }
+  // Validation de la catégorie
+  if (!photoCategorie.trim()) {
+    alert("Veuillez sélectionner une catégorie.");
+    return;
+  }
+  // Validation de la taille de l'image (4 Mo = 4 * 1024 * 1024 octets)
+  if (nouvellePhoto && nouvellePhoto.size > 4 * 1024 * 1024) {
+    alert("La taille de l'image ne doit pas dépasser 4 Mo.");
+    return;
+  }
+  // Ajout des informations au formData
+  formData.append("image", nouvellePhoto);
+  formData.append("title", photoTitre);
   formData.append("category", photoCategorie);
-  createWorks();
-  const modale2 = document.querySelector("#modale2");
+  console.log(nouvellePhoto);
+  console.log(photoTitre);
+  console.log(photoCategorie);
+
+  // Appel de la fonction pour créer une nouvelle œuvre
+  await createWorks();
+
+  // Réinitialisation et fermeture des modales après la soumission
+  document.querySelector("#form_photo").reset();
   modale2.style.display = "none";
-  const modale1 = document.querySelector("#modal1");
-  modale1.style.display = "none";
-  btnValider.reset();
+  document.querySelector("#modal1").style.display = "none";
 }

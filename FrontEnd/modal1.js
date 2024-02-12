@@ -65,13 +65,12 @@ export function modalGallery(gallerys) {
     });
   });
 }
-
 modalGallery(gallerys);
 
-// // modale1
+// modale1
 let modal = null;
 
-// //ouverture de la modale
+//ouverture de la modale
 const openModal = function (event) {
   const target = document.querySelector(event.target.getAttribute("href"));
   event.preventDefault();
@@ -83,7 +82,7 @@ const openModal = function (event) {
     .addEventListener("click", stopPropagation);
 };
 
-// //fermeture de la modale
+//Fermeture de la modale
 const closeModal = function (event) {
   event.preventDefault();
   if (modal === null) return;
@@ -93,7 +92,7 @@ const closeModal = function (event) {
     .removeEventListener("click", stopPropagation);
   modal = null;
 };
-// //ouverture de la modal1
+//Ouverture de la modal1
 document.querySelectorAll(".js-modal").forEach((a) => {
   a.addEventListener("click", openModal);
 });
