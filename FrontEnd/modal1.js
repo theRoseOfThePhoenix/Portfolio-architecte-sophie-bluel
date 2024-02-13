@@ -60,8 +60,15 @@ export function modalGallery(gallerys) {
     // Ajout d'un écouteur d'événement pour la suppression de l'œuvre
     trashIcon.addEventListener("click", async (event) => {
       event.preventDefault();
-      // Appel de la fonction de suppression en passant l'ID de l'œuvre
-      await deleteWorks(loop.id);
+
+      // Message de confirmation avant suppression
+      const isConfirmed = confirm(
+        "Êtes-vous sûr de vouloir supprimer cette œuvre ?"
+      );
+      if (isConfirmed) {
+        // Appel de la fonction de suppression en passant l'ID de l'œuvre
+        await deleteWorks(loop.id);
+      }
     });
   });
 }

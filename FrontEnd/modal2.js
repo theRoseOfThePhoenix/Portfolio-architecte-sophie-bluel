@@ -52,6 +52,7 @@ function createImage(event) {
   apercuPhoto.alt = "Nouvelle Image de Sophie Bluel";
   apercuPhotoDiv.style.display = "flex";
 }
+
 let formData = new FormData(); // Ajoutez des données à formData si nécessaire
 
 // Fonction asynchrone pour importer une nouvelle photo
@@ -73,7 +74,6 @@ async function createWorks() {
     uploadImageDiv.setAttribute("style", "display: none");
     const uploadImage = document.querySelector("#apercuPhoto");
     uploadImage.src = "";
-
     // Rafraîchissement des galeries
     refreshGalleries();
   } catch (error) {
@@ -102,12 +102,11 @@ async function checkForm(event) {
   let photoTitre = document.querySelector("#titre_photo").value;
   let photoCategorie = document.querySelector("#categorie_photo").value;
   // Validation du titre
-  if (!photoTitre.trim()) {
+  if (!photoTitre) {
     alert("Veuillez renseigner le titre de la photo.");
-    return;
   }
   // Validation de la catégorie
-  if (!photoCategorie.trim()) {
+  if (!photoCategorie) {
     alert("Veuillez sélectionner une catégorie.");
     return;
   }

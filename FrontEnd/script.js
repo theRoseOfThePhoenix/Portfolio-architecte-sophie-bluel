@@ -7,19 +7,16 @@ export let gallerys = await fetch("http://localhost:5678/api/works").then(
 export function creatGallery(gallerys) {
   for (let i = 0; i < gallerys.length; i++) {
     const loop = gallerys[i];
-    // Récupération de l'élément du DOM qui accueillera la gallery
-    const sectionGallery = document.querySelector(".gallery");
-    // Création d’une balise dédiée à une photo
-    const figureElement = document.createElement("figure");
+    const sectionGallery = document.querySelector(".gallery"); // Récupération de l'élément du DOM qui accueillera la gallery
+    const figureElement = document.createElement("figure"); // Création d’une balise dédiée à une photo
     const imageElement = document.createElement("img");
+    const descriptionPhoto = document.createElement("figcaption");
+    const idElement = document.createElement("id");
     imageElement.src = loop.imageUrl;
     imageElement.alt = loop.title;
-    const descriptionPhoto = document.createElement("figcaption");
-    descriptionPhoto.innerText = loop.title;
-    const idElement = document.createElement("id");
     idElement.id = loop.id;
+    descriptionPhoto.innerText = loop.title;
 
-    // On rattache la balise photo à la section gallery
     sectionGallery.appendChild(figureElement);
     figureElement.appendChild(imageElement);
     figureElement.appendChild(descriptionPhoto);
@@ -47,6 +44,7 @@ document.querySelectorAll(".filterCategories-btn").forEach((btn) => {
   btn.addEventListener("click", function () {
     const categoryID = parseInt(btn.getAttribute("data-category-id"), 10); // verifie le numéro de la catégorie entré dans le html  La fonction parseInt convertit cette valeur en un nombre entier
     if (btn.classList.contains("filterAll")) {
+      document.querySelector(".gallery").innerText = ""; // Remettre à zéro la galerie
       creatGallery(gallerys);
     } else {
       filterAndDisplayGallery((gallery) => gallery.category.id === categoryID);
@@ -55,7 +53,7 @@ document.querySelectorAll(".filterCategories-btn").forEach((btn) => {
   });
 });
 
-// Masquage modifier
+// Masquage btn modifier
 const modifierWrapper = document.querySelector(".modifier-wrapper");
 modifierWrapper.setAttribute("style", "display : none");
 
@@ -73,10 +71,10 @@ if (localStorage.getItem("token") !== null) {
   //intégration DOM
   const bandeau = document.querySelector(".bandeau");
   const zoneEdition = document.createElement("div");
-  zoneEdition.className = "editor";
   const logoEdition = document.createElement("i");
-  logoEdition.className = "fa-regular fa-pen-to-square";
   const modeEdition = document.createElement("p");
+  zoneEdition.className = "editor";
+  logoEdition.className = "fa-regular fa-pen-to-square";
   modeEdition.innerText = "Mode Édition";
   bandeau.appendChild(zoneEdition);
   zoneEdition.appendChild(logoEdition);
