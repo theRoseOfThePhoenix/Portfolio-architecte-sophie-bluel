@@ -15,8 +15,6 @@ function login() {
     password: password.value,
   };
   const chargeUtile = JSON.stringify(loginInfo);
-  console.log(loginInfo); // Vérifie les informations envoyées
-
   // Envoie la demande de connexion au serveur
   fetch("http://localhost:5678/api/users/login", {
     method: "POST",
