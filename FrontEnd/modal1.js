@@ -74,9 +74,6 @@ export function modalGallery(gallerys) {
 }
 modalGallery(gallerys);
 
-// modale1
-let modal = null;
-
 //ouverture de la modale
 const openModal = function (event) {
   // const target = document.querySelector(event.target.getAttribute("href"));
@@ -94,16 +91,14 @@ const openModal = function (event) {
 //Fermeture de la modale
 const closeModal = function (event) {
   event.preventDefault();
-  if (modal === null) return;
-  modal.style.display = "none";
+  const modal1 = document.querySelector("#modal1");
+  modal1.style.display = "none";
   modal
     .querySelector(".js-modal-stop")
     .removeEventListener("click", stopPropagation);
-  modal = null;
 };
-//Ouverture de la modal1
+//ouverture de la modale
 document.querySelector(".js-modal").addEventListener("click", openModal);
-
 // click au bouton uniquement
 const stopPropagation = function (event) {
   event.stopPropagation();
