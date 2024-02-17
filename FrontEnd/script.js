@@ -33,12 +33,6 @@ const updateActiveButton = (activeButton) => {
   });
   activeButton.classList.add("active");
 };
-// apelle la galery en fonction du filtre
-const filterAndDisplayGallery = (filterCondition) => {
-  const filteredGallerys = gallerys.filter(filterCondition);
-  document.querySelector(".gallery").innerText = ""; // Remettre à zéro la galerie
-  creatGallery(filteredGallerys);
-};
 
 document.querySelectorAll(".filterCategories-btn").forEach((btn) => {
   btn.addEventListener("click", function () {
@@ -47,7 +41,11 @@ document.querySelectorAll(".filterCategories-btn").forEach((btn) => {
       document.querySelector(".gallery").innerText = ""; // Remettre à zéro la galerie
       creatGallery(gallerys);
     } else {
-      filterAndDisplayGallery((gallery) => gallery.category.id === categoryID);
+      const filteredGallerys = gallerys.filter(
+        (gallery) => gallery.category.id === categoryID
+      );
+      document.querySelector(".gallery").innerText = ""; // Remettre à zéro la galerie
+      creatGallery(filteredGallerys);
     }
     updateActiveButton(btn);
   });

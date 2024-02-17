@@ -51,7 +51,7 @@ export function modalGallery(gallerys) {
     imageElement.src = loop.imageUrl;
     imageElement.alt = loop.title;
     trashIcon.classList.add("fa-solid", "fa-trash-can");
-    console.log(imageElement);
+    //console.log(imageElement);
     // Assemblage des éléments et ajout au DOM
     figureElement.appendChild(imageElement);
     figureElement.appendChild(trashIcon);
@@ -79,12 +79,14 @@ let modal = null;
 
 //ouverture de la modale
 const openModal = function (event) {
-  const target = document.querySelector(event.target.getAttribute("href"));
+  // const target = document.querySelector(event.target.getAttribute("href"));
   event.preventDefault();
-  target.style.display = null;
-  modal = target;
-  modal.querySelector(".fa-xmark").addEventListener("click", closeModal);
-  modal
+  // target.style.display = null;
+  // modal = target;
+  const modal1 = document.querySelector("#modal1");
+  modal1.style.display = "flex";
+  modal1.querySelector(".fa-xmark").addEventListener("click", closeModal);
+  modal1
     .querySelector(".js-modal-stop")
     .addEventListener("click", stopPropagation);
 };
@@ -100,9 +102,8 @@ const closeModal = function (event) {
   modal = null;
 };
 //Ouverture de la modal1
-document.querySelectorAll(".js-modal").forEach((a) => {
-  a.addEventListener("click", openModal);
-});
+document.querySelector(".js-modal").addEventListener("click", openModal);
+
 // click au bouton uniquement
 const stopPropagation = function (event) {
   event.stopPropagation();
