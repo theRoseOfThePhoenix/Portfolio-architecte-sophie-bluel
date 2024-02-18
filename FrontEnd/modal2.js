@@ -70,13 +70,11 @@ async function createWorks(newFile) {
     if (response.status != 201) {
       throw new Error("Une erreur est survenue");
     }
-    // Rafraîchissement des galeries devrait être ici si nécessaire
+    // Rafraîchissement des galeries
     const updatedWorks = await response.json();
-    updateWorksData([...gallerys, updatedWorks]); // Assurez-vous que cette ligne fait ce que vous attendez
-
-    //on cache la div de l'image uploeadé et on vide la source
+    updateWorksData([...gallerys, updatedWorks]);
     const uploadImageDiv = document.querySelector("#apercuPhotoDiv");
-    uploadImageDiv.style.display = "none"; // Modification pour une meilleure lisibilité
+    uploadImageDiv.style.display = "none";
     const uploadImage = document.querySelector("#apercuPhoto");
     uploadImage.src = "";
   } catch (error) {

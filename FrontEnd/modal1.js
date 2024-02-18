@@ -1,5 +1,4 @@
 // @ts-nocheck
-// Importation des fonctions nécessaires depuis le script principal
 import { updateWorksData } from "./script.js";
 
 let gallerys = await fetch("http://localhost:5678/api/works").then((works) =>
@@ -21,19 +20,8 @@ export function deleteWorks(idElement) {
       console.log(response);
       if (response.ok) {
         //Rafraîchissement des galeries après la suppression
-        //const works = await fetch("http://localhost:5678/api/works").then(
-        // appel API pour récupérer les œuvres mises à jour
-        //(response) => response.json()
-        //);
         const updatedWorks = gallerys.filter((work) => work.id !== idElement);
         updateWorksData(updatedWorks);
-        /*
-        document.querySelector(".gallery").innerHTML = ""; // nettoyage des contenus
-        document.querySelector(".modal_gallery").innerHTML = ""; // nettoyage des contenus
-
-        modalGallery(gallerys); // rapelle des galeries mis à jour
-        creatGallery(gallerys); // rapelle des galeries mis à jour
-        */
       }
     });
   } catch (error) {
@@ -59,7 +47,6 @@ export async function modalGallery(gallerys) {
     imageElement.src = loop.imageUrl;
     imageElement.alt = loop.title;
     trashIcon.classList.add("fa-solid", "fa-trash-can");
-    //console.log(imageElement);
     // Assemblage des éléments et ajout au DOM
     figureElement.appendChild(imageElement);
     figureElement.appendChild(trashIcon);
