@@ -1,8 +1,7 @@
 // @ts-nocheck
 
 // Importations nécessaires
-import { modalGallery } from "./modal1.js";
-import { creatGallery } from "./script.js";
+import { gallerys, updateWorksData } from "./script.js";
 
 // Sélecteurs DOM
 const modale2 = document.querySelector("#modale2");
@@ -53,51 +52,45 @@ function createImage(event) {
   apercuPhotoDiv.style.display = "flex";
 }
 
-let formData = new FormData(); // Ajoutez des données à formData si nécessaire
+let newFile = new FormData(); // Ajoutez des données à formData si nécessaire
 
 // Fonction asynchrone pour importer une nouvelle photo
-async function createWorks() {
+async function createWorks(newFile) {
   try {
     const token = localStorage.getItem("token");
-
-    await fetch("http://localhost:5678/api/works", {
+    const response = await fetch("http://localhost:5678/api/works", {
       method: "POST",
       headers: {
         Accept: "application/json;charset=utf-8",
         Authorization: `Bearer ${token}`,
       },
-      body: formData,
+      body: newFile,
     });
+
+    if (response.status != 201) {
+      throw new Error("Une erreur est survenue");
+    }
+    // Rafraîchissement des galeries devrait être ici si nécessaire
+    const updatedWorks = await response.json();
+    updateWorksData([...gallerys, updatedWorks]); // Assurez-vous que cette ligne fait ce que vous attendez
 
     //on cache la div de l'image uploeadé et on vide la source
     const uploadImageDiv = document.querySelector("#apercuPhotoDiv");
-    uploadImageDiv.setAttribute("style", "display: none");
+    uploadImageDiv.style.display = "none"; // Modification pour une meilleure lisibilité
     const uploadImage = document.querySelector("#apercuPhoto");
     uploadImage.src = "";
-    // Rafraîchissement des galeries
-    refreshGalleries();
   } catch (error) {
     console.error("Erreur lors de la création de l'œuvre:", error);
   }
 }
 
-// Fonction pour rafraîchir les galeries
-async function refreshGalleries() {
-  const works = await fetch("http://localhost:5678/api/works").then((works) =>
-    works.json()
-  );
-  document.querySelector(".gallery").innerHTML = "";
-  creatGallery(works);
-  modalGallery(works);
-}
-
 const btnValider = document.querySelector("#form_photo");
 btnValider.addEventListener("submit", checkForm);
 
-async function checkForm(event) {
+function checkForm(event) {
   event.preventDefault();
   // Initialisation de formData pour chaque soumission pour éviter d'ajouter des données en double
-  formData = new FormData();
+  newFile = new FormData();
   let nouvellePhoto = document.querySelector("#custom_button").files[0];
   let photoTitre = document.querySelector("#titre_photo").value;
   let photoCategorie = document.querySelector("#categorie_photo").value;
@@ -116,15 +109,12 @@ async function checkForm(event) {
     return;
   }
   // Ajout des informations au formData
-  formData.append("image", nouvellePhoto);
-  formData.append("title", photoTitre);
-  formData.append("category", photoCategorie);
-  console.log(nouvellePhoto);
-  console.log(photoTitre);
-  console.log(photoCategorie);
+  newFile.append("image", nouvellePhoto);
+  newFile.append("title", photoTitre);
+  newFile.append("category", photoCategorie);
 
   // Appel de la fonction pour créer une nouvelle œuvre
-  await createWorks();
+  createWorks(newFile);
 
   // Réinitialisation et fermeture des modales après la soumission
   document.querySelector("#form_photo").reset();

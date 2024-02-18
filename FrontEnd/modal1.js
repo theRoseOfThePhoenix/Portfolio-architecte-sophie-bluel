@@ -1,40 +1,48 @@
 // @ts-nocheck
 // Importation des fonctions nécessaires depuis le script principal
-import { creatGallery, gallerys } from "./script.js";
+import { updateWorksData } from "./script.js";
 
+let gallerys = await fetch("http://localhost:5678/api/works").then((works) =>
+  works.json()
+);
 // Fonction asynchrone pour supprimer une œuvre par son ID
-export async function deleteWorks(idElement) {
+export function deleteWorks(idElement) {
   try {
     const token = localStorage.getItem("token"); // récupération du token de l'utilisateur depuis le localStorage
 
-    await fetch(`http://localhost:5678/api/works/${idElement}`, {
+    fetch(`http://localhost:5678/api/works/${idElement}`, {
       // appel API pour supprimer l'œuvre spécifiée par idElement
       method: "DELETE",
       headers: {
         Accept: "application/json;charset=utf-8",
         Authorization: `Bearer ${token}`,
       },
+    }).then((response) => {
+      console.log(response);
+      if (response.ok) {
+        //Rafraîchissement des galeries après la suppression
+        //const works = await fetch("http://localhost:5678/api/works").then(
+        // appel API pour récupérer les œuvres mises à jour
+        //(response) => response.json()
+        //);
+        const updatedWorks = gallerys.filter((work) => work.id !== idElement);
+        updateWorksData(updatedWorks);
+        /*
+        document.querySelector(".gallery").innerHTML = ""; // nettoyage des contenus
+        document.querySelector(".modal_gallery").innerHTML = ""; // nettoyage des contenus
+
+        modalGallery(gallerys); // rapelle des galeries mis à jour
+        creatGallery(gallerys); // rapelle des galeries mis à jour
+        */
+      }
     });
-
-    // Rafraîchissement des galeries après la suppression
-    const works = await fetch("http://localhost:5678/api/works").then(
-      // appel API pour récupérer les œuvres mises à jour
-      (response) => response.json()
-    );
-
-    document.querySelector(".gallery").innerHTML = ""; // nettoyage des contenus
-    document.querySelector(".modal_gallery").innerHTML = ""; // nettoyage des contenus
-
-    modalGallery(works); // rapelle des galeries mis à jour
-    creatGallery(works); // rapelle des galeries mis à jour
   } catch (error) {
     // erreurs éventuelles lors de l'appel API
     console.error("Erreur lors de la suppression de l'œuvre : ", error);
   }
 }
-
 // Fonction pour créer et afficher la galerie dans une modale
-export function modalGallery(gallerys) {
+export async function modalGallery(gallerys) {
   const modalGallery = document.querySelector(".modal_gallery"); // élément du DOM destiné à la galerie modale
 
   modalGallery.innerHTML = ""; // nettoyage des contenus
@@ -60,14 +68,13 @@ export function modalGallery(gallerys) {
     // Ajout d'un écouteur d'événement pour la suppression de l'œuvre
     trashIcon.addEventListener("click", async (event) => {
       event.preventDefault();
-
       // Message de confirmation avant suppression
       const isConfirmed = confirm(
         "Êtes-vous sûr de vouloir supprimer cette œuvre ?"
       );
       if (isConfirmed) {
         // Appel de la fonction de suppression en passant l'ID de l'œuvre
-        await deleteWorks(loop.id);
+        deleteWorks(loop.id);
       }
     });
   });
@@ -76,10 +83,7 @@ modalGallery(gallerys);
 
 //ouverture de la modale
 const openModal = function (event) {
-  // const target = document.querySelector(event.target.getAttribute("href"));
   event.preventDefault();
-  // target.style.display = null;
-  // modal = target;
   const modal1 = document.querySelector("#modal1");
   modal1.style.display = "flex";
   modal1.querySelector(".fa-xmark").addEventListener("click", closeModal);
@@ -93,7 +97,7 @@ const closeModal = function (event) {
   event.preventDefault();
   const modal1 = document.querySelector("#modal1");
   modal1.style.display = "none";
-  modal
+  modal1
     .querySelector(".js-modal-stop")
     .removeEventListener("click", stopPropagation);
 };

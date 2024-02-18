@@ -1,10 +1,15 @@
 // @ts-nocheck
+import { modalGallery } from "./modal1.js";
+
 export let gallerys = await fetch("http://localhost:5678/api/works").then(
   (works) => works.json()
 );
 
-//console.log(gallerys);
-export function creatGallery(gallerys) {
+const categories = await fetch("http://localhost:5678/api/categories").then(
+  (categories) => categories.json()
+);
+
+export async function creatGallery(gallerys) {
   for (let i = 0; i < gallerys.length; i++) {
     const loop = gallerys[i];
     const sectionGallery = document.querySelector(".gallery"); // Récupération de l'élément du DOM qui accueillera la gallery
@@ -25,6 +30,22 @@ export function creatGallery(gallerys) {
 }
 creatGallery(gallerys);
 
+//Création des filtres par catégorie
+async function creerFiltres(categories) {
+  const zoneButtons = document.querySelector(".filtres");
+  const buttonReset = document.createElement("button");
+  buttonReset.innerText = "Tous";
+  buttonReset.classList.add("filterAll", "filterCategories-btn", "active");
+  zoneButtons.appendChild(buttonReset);
+  for (let i = 0; i < categories.length; i++) {
+    const buttonFilters = document.createElement("button");
+    buttonFilters.classList.add("filterCategories-btn");
+    zoneButtons.appendChild(buttonFilters);
+    buttonFilters.innerText = categories[i].name;
+    buttonFilters.id = categories[i].id;
+  }
+}
+creerFiltres(categories);
 //gestion des boutons filtres
 //stylisation des btns
 const updateActiveButton = (activeButton) => {
@@ -36,7 +57,7 @@ const updateActiveButton = (activeButton) => {
 
 document.querySelectorAll(".filterCategories-btn").forEach((btn) => {
   btn.addEventListener("click", function () {
-    const categoryID = parseInt(btn.getAttribute("data-category-id"), 10); // verifie le numéro de la catégorie entré dans le html  La fonction parseInt convertit cette valeur en un nombre entier
+    const categoryID = parseInt(btn.getAttribute("id"), 10); // verifie le numéro de la catégorie entré dans le html  La fonction parseInt convertit cette valeur en un nombre entier
     if (btn.classList.contains("filterAll")) {
       document.querySelector(".gallery").innerText = ""; // Remettre à zéro la galerie
       creatGallery(gallerys);
@@ -51,6 +72,19 @@ document.querySelectorAll(".filterCategories-btn").forEach((btn) => {
   });
 });
 
+//Mise à jour de la gallery lors de l'ajout ou de la suppression d'image
+export async function updateWorksData(updatedData) {
+  gallerys = updatedData;
+  refreshGalleries(); // Fonction pour rafraîchir l'affichage
+}
+export async function refreshGalleries() {
+  // Videz et recréez la galerie avec currentWorksData
+  document.querySelector(".gallery").innerHTML = "";
+  document.querySelector(".modal_gallery").innerHTML = "";
+  creatGallery(gallerys); // Utilisez les données mises à jour pour recréer la galerie
+  modalGallery(gallerys);
+}
+//mode edition
 // Masquage btn modifier
 const modifierWrapper = document.querySelector(".modifier-wrapper");
 modifierWrapper.setAttribute("style", "display : none");
