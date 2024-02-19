@@ -5,25 +5,27 @@ let gallerys = await fetch("http://localhost:5678/api/works").then((works) =>
   works.json()
 );
 // Fonction asynchrone pour supprimer une œuvre par son ID
-export function deleteWorks(idElement) {
+export async function deleteWorks(idElement) {
   try {
     const token = localStorage.getItem("token"); // récupération du token de l'utilisateur depuis le localStorage
-
-    fetch(`http://localhost:5678/api/works/${idElement}`, {
-      // appel API pour supprimer l'œuvre spécifiée par idElement
-      method: "DELETE",
-      headers: {
-        Accept: "application/json;charset=utf-8",
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((response) => {
-      console.log(response);
-      if (response.ok) {
-        //Rafraîchissement des galeries après la suppression
-        const updatedWorks = gallerys.filter((work) => work.id !== idElement);
-        updateWorksData(updatedWorks);
+    const response = await fetch(
+      `http://localhost:5678/api/works/${idElement}`,
+      {
+        // appel API pour supprimer l'œuvre spécifiée par idElement
+        method: "DELETE",
+        headers: {
+          Accept: "application/json;charset=utf-8",
+          Authorization: `Bearer ${token}`,
+        },
       }
-    });
+    );
+
+    if (!response.ok) {
+      throw new Error("Une erreur est survenue");
+    }
+    //Rafraîchissement des galeries après la suppression
+    gallerys = gallerys.filter((work) => work.id !== idElement);
+    updateWorksData(gallerys);
   } catch (error) {
     // erreurs éventuelles lors de l'appel API
     console.error("Erreur lors de la suppression de l'œuvre : ", error);

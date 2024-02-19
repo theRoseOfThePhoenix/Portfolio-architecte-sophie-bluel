@@ -73,11 +73,12 @@ document.querySelectorAll(".filterCategories-btn").forEach((btn) => {
 });
 
 //Mise à jour de la gallery lors de l'ajout ou de la suppression d'image
-export async function updateWorksData(updatedData) {
-  gallerys = updatedData;
+
+export function updateWorksData(updatedWorks) {
+  gallerys = updatedWorks;
   refreshGalleries(); // Fonction pour rafraîchir l'affichage
 }
-export async function refreshGalleries() {
+export function refreshGalleries() {
   // Videz et recréez la galerie avec currentWorksData
   document.querySelector(".gallery").innerHTML = "";
   document.querySelector(".modal_gallery").innerHTML = "";

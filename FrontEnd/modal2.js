@@ -2,6 +2,7 @@
 
 // Importations nécessaires
 import { gallerys, updateWorksData } from "./script.js";
+import { deleteWorks } from "./modal1.js";
 
 // Sélecteurs DOM
 const modale2 = document.querySelector("#modale2");
@@ -71,8 +72,10 @@ async function createWorks(newFile) {
       throw new Error("Une erreur est survenue");
     }
     // Rafraîchissement des galeries
-    const updatedWorks = await response.json();
-    updateWorksData([...gallerys, updatedWorks]);
+    let addedWork = await response.json();
+    gallerys.push(addedWork);
+    updateWorksData(gallerys);
+    deleteWorks();
     const uploadImageDiv = document.querySelector("#apercuPhotoDiv");
     uploadImageDiv.style.display = "none";
     const uploadImage = document.querySelector("#apercuPhoto");
